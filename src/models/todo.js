@@ -13,6 +13,6 @@ const TodoSchema = new mongoose.Schema({
   completed: { type: Boolean, default: false },
 });
 
-const Todo = mongoose.model.todo || mongoose.model("todo", TodoSchema);
+const Todo = mongoose.models.todo || mongoose.model("todo", TodoSchema);
 
 export default Todo;
