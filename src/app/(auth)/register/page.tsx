@@ -1,10 +1,13 @@
 'use client';
 import Button from '@/components/Button';
+import Footer from '@/components/Footer';
+import Header from '@/components/Header';
 import Input from '@/components/Input';
 import { Form, Formik } from 'formik'
+import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import * as Yup from 'yup';
 
 const Register = () => {
@@ -12,6 +15,17 @@ const Register = () => {
   const [error,setError] = useState("");
   const [formSubmitting, setFormSubmitting] = useState(false);
   const router = useRouter();
+  const {status} = useSession();
+
+  useEffect(() => {
+    if(status === "authenticated"){
+      router.push("/todo")
+    }
+  }, [status, router]);
+
+    if(status !== 'unauthenticated'){
+      return null;
+    }
   
   const validationSchema = Yup.object().shape({
     name: Yup.string().required("O nome é obrigatório").min(3, "O nome deve ter pelo menos 3 caracteres"),
@@ -68,9 +82,7 @@ const Register = () => {
 
   return (
     <div className="bg-gray-100 min-h-screen flex flex-col items-center justify-start">
-      <header className="text-3xl font-bold text-white w-full text-center shadow-lg p-4 bg-blue-900 mb-4">
-        To Do List
-      </header>
+      <Header/>
       <section className='w-full max-w-sm px-8'>
           <Formik validationSchema={validationSchema} initialValues={initialValues} onSubmit={handleSubmit}>
             {({ values }) =>
@@ -88,6 +100,7 @@ const Register = () => {
             </Form>}
           </Formik>
       </section>
+      <Footer/>
     </div>
   )
 }

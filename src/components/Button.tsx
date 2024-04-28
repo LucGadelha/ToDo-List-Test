@@ -1,14 +1,16 @@
 import React from 'react'
 
 type buttonChild = {
-  type:string,
-    text: string,
-    className: string,
+  type: string,
+  disable:boolean,
+  onClick: () => void,
+  text: string,
+  className: string,
 }
 
 const Button = (Child:buttonChild) => {
   return (
-    <button type={Child.type} className={Child.className}>
+    <button type={Child.type} disable={Child.disable} onClick={Child.onClick} className={Child.className}>
       {Child.text}
     </button>
   )

@@ -1,6 +1,11 @@
 'use client';
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
+import LayoutAdmin from "@/components/LayoutAdmin";
+import Button from "@/components/Button";
+import { signOut } from "next-auth/react";
 
 const Page = () => {
   const [task, setTask] = useState<string>("");
@@ -104,75 +109,81 @@ const Page = () => {
   }
 
   return (
-    <div className="bg-gray-100 min-h-screen flex flex-col items-center justify-start">
-      <header className="text-3xl font-bold text-white w-full text-center shadow-lg p-4 bg-blue-900 mb-4">
-        To Do List
-      </header>
-      <div className="w-full max-w-xl px-4">
-        <section className="w-full mt-4 flex flex-col items-center">
-          {showAddInput && ( // Renderização condicional para mostrar o input apenas quando showAddInput for verdadeiro
-            <input
-              className="bg-white shadow-lg text-center rounded-lg p-2 w-full mb-4"
-              type="text"
-              placeholder="Adicione uma tarefa..."
-              value={task}
-              onChange={(e) => setTask(e.target.value)}
-            />
-          )}
-          <button
-            onClick={editIndex === -1 ? addTodo : updateTodo}
-            className="bg-blue-600 shadow-lg rounded-lg p-2 mb-4 text-white font-semibold transition duration-200 hover:bg-blue-500 hover:text-gray-500 active:bg-green-400 active:text-gray-600 w-full"
-          >
-            {editIndex !== -1 ? "Salvar Edição" : "Adicionar Tarefa"}
-          </button>
-          {editIndex === -1 && (
+    <LayoutAdmin>
+      <div className="bg-gray-100 min-h-screen flex flex-col items-center justify-start">
+        <Header/>
+        <Button
+        onClick={() => signOut()}
+        text="Sair"
+        className="bg-red-600 text-white rounded px-3 py-1 cursor-pointer absolute top-4 right-10"/>
+
+        <div className="w-full max-w-xl px-4">
+          <section className="w-full mt-4 flex flex-col items-center">
+            {showAddInput && ( // Renderização condicional para mostrar o input apenas quando showAddInput for verdadeiro
+              <input
+                className="bg-white shadow-lg text-center rounded-lg p-2 w-full mb-4"
+                type="text"
+                placeholder="Adicione uma tarefa..."
+                value={task}
+                onChange={(e) => setTask(e.target.value)}
+              />
+            )}
             <button
-              onClick={clearTodos}
-              className="bg-blue-600 shadow-lg rounded-lg p-2 mb-4 text-white font-semibold transition duration-200 hover:bg-blue-500 hover:text-gray-500 active:bg-red-400 active:text-gray-600 w-full"
+              onClick={editIndex === -1 ? addTodo : updateTodo}
+              className="bg-blue-600 shadow-lg rounded-lg p-2 mb-4 text-white font-semibold transition duration-200 hover:bg-blue-500 hover:text-gray-500 active:bg-green-400 active:text-gray-600 w-full"
             >
-              Limpar Tudo
+              {editIndex !== -1 ? "Salvar Edição" : "Adicionar Tarefa"}
             </button>
-          )}
-        </section>
-      </div>
-      <div className="w-full max-w-xl mt-4 py-4 px-4">
-        {todos && todos.map((todo, index) => (
-          <div
-            className="flex flex-row bg-slate-300 rounded-lg p-2 w-full mb-2 items-center justify-center shadow-lg"
-            key={index}
-          >
-            <p className="text-slate-700 font-semibold bg-slate-300 w-2/3 text-center" style={{textDecoration: editIndex === index ? "line-through" : "none" }}>
-              {editIndex === index ? (
-                <input
-                  className="bg-white text-center rounded-lg p-2 w-full"
-                  type="text"
-                  value={editTodoInfo.desc}
-                  onChange={(e) => setEditTodoInfo({...editTodoInfo, desc: e.target.value})}
-                />
-              ) : (
-                todo.desc
+            {editIndex === -1 && (
+              <button
+                onClick={clearTodos}
+                className="bg-blue-600 shadow-lg rounded-lg p-2 mb-4 text-white font-semibold transition duration-200 hover:bg-blue-500 hover:text-gray-500 active:bg-red-400 active:text-gray-600 w-full"
+              >
+                Limpar Tudo
+              </button>
+            )}
+          </section>
+        </div>
+        <div className="w-full max-w-xl mt-4 py-4 px-4">
+          {todos && todos.map((todo, index) => (
+            <div
+              className="flex flex-row bg-slate-300 rounded-lg p-2 w-full mb-2 items-center justify-center shadow-lg"
+              key={index}
+            >
+              <p className="text-slate-700 font-semibold bg-slate-300 w-2/3 text-center" style={{textDecoration: editIndex === index ? "line-through" : "none" }}>
+                {editIndex === index ? (
+                  <input
+                    className="bg-white text-center rounded-lg p-2 w-full"
+                    type="text"
+                    value={editTodoInfo.desc}
+                    onChange={(e) => setEditTodoInfo({...editTodoInfo, desc: e.target.value})}
+                  />
+                ) : (
+                  todo.desc
+                )}
+              </p>
+              {editIndex !== index && (
+                <button
+                  onClick={() => editTodo(index, todo)}
+                  className="bg-blue-600 shadow-lg rounded-lg p-1 text-white font-semibold transition duration-200 hover:bg-white hover:text-gray-500 active:bg-gray-500 active:text-white mx-2"
+                >
+                  Editar
+                </button>
               )}
-            </p>
-            {editIndex !== index && (
-              <button
-                onClick={() => editTodo(index, todo)}
-                className="bg-blue-600 shadow-lg rounded-lg p-1 text-white font-semibold transition duration-200 hover:bg-white hover:text-gray-500 active:bg-gray-500 active:text-white mx-2"
-              >
-                Editar
-              </button>
-            )}
-            {editIndex !== index && (
-              <button
-                onClick={() => deleteTodo(todo)}
-                className="bg-blue-600 shadow-lg rounded-lg p-1 text-white font-semibold transition duration-200 hover:bg-white hover:text-red-600 active:bg-red-600 active:text-white"
-              >
-                Deletar
-              </button>
-            )}
-          </div>
-        ))}
+              {editIndex !== index && (
+                <button
+                  onClick={() => deleteTodo(todo)}
+                  className="bg-blue-600 shadow-lg rounded-lg p-1 text-white font-semibold transition duration-200 hover:bg-white hover:text-red-600 active:bg-red-600 active:text-white"
+                >
+                  Deletar
+                </button>
+              )}
+            </div>
+          ))}
+        </div>
+        <Footer/>
       </div>
-    </div>
+    </LayoutAdmin>
   );
 };
 

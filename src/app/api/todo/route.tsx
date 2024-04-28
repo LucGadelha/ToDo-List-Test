@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { connect } from "@/dbConfig/db";
+import connect from "@/dbConfig/db.js";
 import Todo from "@/models/todo";
 import { v4 } from "uuid";
 import { error } from "console";
