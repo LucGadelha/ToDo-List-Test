@@ -11,11 +11,12 @@ export async function POST(req) {
 
     const emailExists = await User.findOne({ email });
 
-    if (emailExists)
+    if (emailExists) {
       return NextResponse.json({
-        message: "Email ja cadastrado",
+        message: "Email ja cadastrado!",
         status: 409,
       });
+    }
 
     const hashedPassword = await bcrypt.hash(password, 10);
 

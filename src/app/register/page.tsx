@@ -53,8 +53,6 @@ const Register = () => {
           setFormSubmitting(false);
 
         })
-        alert('Usuário criado com sucesso!')
-        router.push("/login")
     } catch (error: any) {
       setFormSubmitting(false);
       renderError("Erro ao criar a conta: " + error.message);
