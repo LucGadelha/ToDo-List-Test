@@ -17,11 +17,10 @@ const Page = () => {
     axios.get("/api/todo")
       .then((response: any) => {
         console.log(response);
-        setTodos(response.data.todo || []); // Certifica-se de que `todos` seja inicializado corretamente
+        setTodos(response.data.todo || []);
       })
       .catch((error: any) => {
         console.error("Erro ao buscar dados:", error.response);
-        // Exibir uma mensagem de erro para o usuário
       });
   }, []);
   
@@ -84,7 +83,6 @@ const Page = () => {
       const resp = await axios.put(`/api/todo/${editTodoInfo.id}`, data);
       console.log(resp.data);
       
-      // Atualiza a tarefa editada no estado todos
       setTodos(prevTodos => {
         return prevTodos.map(todo => {
           if (todo.id === editTodoInfo.id) {
@@ -99,15 +97,14 @@ const Page = () => {
       });
 
       setEditIndex(-1);
-      setShowAddInput(true); // Mostra o input de adicionar tarefas após terminar a edição
+      setShowAddInput(true);
     } catch (error) {
       console.error("Erro ao atualizar a tarefa:", error);
-      // Lida com o erro, se necessário
     }
   }
 
   return (
-    <div className="bg-gray-200 min-h-screen flex flex-col items-center justify-start">
+    <div className="bg-gray-100 min-h-screen flex flex-col items-center justify-start">
       <header className="text-3xl font-bold text-white w-full text-center shadow-lg p-4 bg-blue-900 mb-4">
         To Do List
       </header>
