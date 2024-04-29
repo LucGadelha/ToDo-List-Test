@@ -4,7 +4,7 @@ import Header from "@/components/Header";
 import axios from "axios";
 import Link from "next/link";
 
-axios.defaults.baseURL = 'https://localhost:3000';
+axios.defaults.baseURL = 'https://todo-test-sandy-five.vercel.app';
 
 export default function Home() {
   return (
