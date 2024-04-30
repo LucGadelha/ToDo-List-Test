@@ -18,22 +18,22 @@ export async function GET(req: NextRequest, res: NextResponse) {
 }
 
 export async function POST(req: NextRequest, res: NextResponse) {
-    try{    
-        const reqBody = await req.json()
-        const {desc} = reqBody
-        console.log(desc)
+    try {    
+        const reqBody = await req.json();
+        const { desc } = reqBody;
 
         const newTodo = new Todo({
             id: v4(),
             desc,
             completed: false
-            })
-            
-        const savedTodo = await newTodo.save();
-        return NextResponse.json({msg: "tarefa add", sucess: true, savedTodo})
-    }
-    catch (error) {
-             return NextResponse.json({error: "Alguma coisa errada com o POST", success: false})
+        });
+        
+        await newTodo.save();
+        
+        // Retornar apenas o ID do Todo recém-salvo
+        return NextResponse.json({ msg: "Tarefa adicionada", success: true, id: newTodo.id });
+    } catch (error) {
+        return NextResponse.json({ error: "Alguma coisa errada com o POST", success: false });
     }
 }
 
